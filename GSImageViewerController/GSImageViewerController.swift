@@ -80,10 +80,15 @@ open class GSTransitionInfo {
     
 }
 
+public protocol GSImageViewerControllerDelegate {
+    func imageViewerControllerShouldDimiss(sender: GSImageViewerController) -> Bool
+}
+
 open class GSImageViewerController: UIViewController {
     
     open let imageInfo      : GSImageInfo
     open var transitionInfo : GSTransitionInfo?
+    public var imageViewerControllerDelegate: GSImageViewerControllerDelegate? = nil
     
     fileprivate let imageView  = UIImageView()
     fileprivate let scrollView = UIScrollView()
@@ -204,7 +209,13 @@ open class GSImageViewerController: UIViewController {
     
     @objc fileprivate func singleTap() {
         if navigationController == nil || (presentingViewController != nil && navigationController!.viewControllers.count <= 1) {
-            dismiss(animated: true, completion: nil)
+            if let delegate = self.imageViewerControllerDelegate {
+                if delegate.imageViewerControllerShouldDimiss(sender: self) {
+                    dismiss(animated: true, completion: nil)
+                }
+            } else {
+                dismiss(animated: true, completion: nil)
+            }
         }
     }
     
