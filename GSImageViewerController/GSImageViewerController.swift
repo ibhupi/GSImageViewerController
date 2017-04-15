@@ -146,6 +146,9 @@ open class GSImageViewerController: UIViewController {
         scrollView.frame = view.bounds
         scrollView.contentSize = imageView.bounds.size
         scrollView.maximumZoomScale = imageInfo.calculateMaximumZoomScale(scrollView.bounds.size)
+        var offset = scrollView.contentOffset
+        offset.x = (scrollView.contentSize.width - scrollView.frame.size.width)/2
+        scrollView.contentOffset = offset
     }
     
     // MARK: Setups
@@ -350,7 +353,10 @@ class GSImageViewerTransition: NSObject, UIViewControllerAnimatedTransitioning {
             UIView.animate(withDuration: transitionInfo.duration,
                 animations: {
                     tempMask.alpha  = 1
-                    tempImage.frame = imageViewer.imageView.frame
+                    var frame = imageViewer.imageView.frame
+                    frame.origin.x = -(frame.size.width - imageViewer.view.bounds.width)/2
+                    frame.origin.y = -(frame.size.height - imageViewer.view.bounds.height)/2
+                    tempImage.frame = frame
                 },
                 completion: { _ in
                     tempMask.removeFromSuperview()
@@ -396,6 +402,12 @@ extension GSImageViewerController: UIGestureRecognizerDelegate {
         if let pan = gestureRecognizer as? UIPanGestureRecognizer {
             if scrollView.zoomScale != 1.0 {
                 return false
+            }
+            if imageInfo.imageMode == .aspectFill &&
+               scrollView.contentOffset.y == 0 &&
+               pan.translation(in: view).x == 0 &&
+               pan.translation(in: view).y != 0 {
+                return true
             }
             if imageInfo.imageMode == .aspectFill && (scrollView.contentOffset.x > 0 || pan.translation(in: view).x <= 0) {
                 return false
