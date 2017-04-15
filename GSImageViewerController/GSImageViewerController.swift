@@ -100,8 +100,9 @@ open class GSImageViewerController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    public convenience init(imageInfo: GSImageInfo, transitionInfo: GSTransitionInfo) {
-        self.init(imageInfo: imageInfo)
+    public init(imageInfo: GSImageInfo, transitionInfo: GSTransitionInfo) {
+        self.imageInfo = imageInfo
+        super.init(nibName: nil, bundle: nil)
         self.transitionInfo = transitionInfo
         if let fromView = transitionInfo.fromView, let referenceView = fromView.superview {
             self.transitioningDelegate = self
