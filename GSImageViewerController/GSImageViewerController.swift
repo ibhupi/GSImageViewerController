@@ -91,7 +91,7 @@ open class GSImageViewerController: UIViewController {
     public var imageViewerControllerDelegate: GSImageViewerControllerDelegate? = nil
     
     fileprivate let imageView  = UIImageView()
-    fileprivate let scrollView = UIScrollView()
+    public let scrollView = UIScrollView()
     
     fileprivate lazy var session: URLSession = {
         let configuration = URLSessionConfiguration.ephemeral
