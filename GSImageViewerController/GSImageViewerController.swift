@@ -90,7 +90,7 @@ open class GSImageViewerController: UIViewController {
     open var transitionInfo : GSTransitionInfo?
     public var imageViewerControllerDelegate: GSImageViewerControllerDelegate? = nil
     
-    fileprivate let imageView  = UIImageView()
+    public let imageView  = UIImageView()
     public let scrollView = UIScrollView()
     
     fileprivate lazy var session: URLSession = {
